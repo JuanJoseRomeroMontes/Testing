@@ -7,6 +7,9 @@ class Room {
     }
 
     isOccupied(date){
+        if(!date || typeof date.getMonth !== 'function')
+            return null;
+
         let occupied = false;
 
         this.bookings.forEach(booking => {
@@ -18,7 +21,27 @@ class Room {
     }
 
     occupancyPercentage(startDate, endDate){
-        
+
+        if(!startDate || typeof startDate.getMonth !== 'function' || !endDate || typeof endDate.getMonth !== 'function')
+            return null;
+
+        if(startDate >= endDate)
+            return false;
+
+        let totalDays = 0;
+        let occupiedDays = 0;
+
+        for (var d = new Date(startDate.getTime()); d <= endDate; d.setDate(d.getDate() + 1)) {
+            totalDays++;
+
+            if(this.isOccupied(d))
+                occupiedDays++;
+        }
+
+        let percentage = occupiedDays/totalDays*100;
+        percentage = Math.trunc(percentage);
+
+        return percentage;
     }
 
     static totalOccupancyPercentage(rooms, startDate, endDate){
