@@ -45,7 +45,17 @@ class Room {
     }
 
     static totalOccupancyPercentage(rooms, startDate, endDate){
-        
+        if(!rooms || !Array.isArray(rooms))
+            return null;
+
+        let totalValue = 0;
+         
+        rooms.forEach(room => {
+            const occupancy = room.occupancyPercentage(startDate, endDate);
+            totalValue += occupancy;
+        });
+
+        return (totalValue/rooms.length);
     }
 
     static availableRooms(rooms, startDate, endDate){
