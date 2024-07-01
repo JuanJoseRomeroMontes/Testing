@@ -59,7 +59,19 @@ class Room {
     }
 
     static availableRooms(rooms, startDate, endDate){
-        
+        if(!rooms || !Array.isArray(rooms))
+            return null;
+
+        const availableRooms = [];
+
+        rooms.forEach(room => {
+            if(this.totalOccupancyPercentage([room], startDate, endDate) !== 100)
+                {
+                    availableRooms.push(room);
+                }
+        });
+
+        return availableRooms;
     }
 }
 

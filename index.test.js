@@ -223,6 +223,89 @@ describe('\nTesting totalOccupancyPercentage method:', () => {
     });
 });
 
-//#region availableRooms Test
+describe('\nTesting availableRooms method:', () => {
+    test('Check all rooms for the first two days', () => {
+        const room1 = new Room({...roomTemplate, });
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room1});
+        room1.bookings = [booking1];
 
-//#endregion
+        const room2 = new Room({...roomTemplate});
+        const booking2 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-08'), checkOut: new Date('2024-01-10'), room:room2});
+        room2.bookings = [booking2];
+
+        const room3 = new Room({...roomTemplate});
+        const booking3 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-11'), checkOut: new Date('2024-01-13'), room:room3});
+        room3.bookings = [booking3];
+
+        const rooms = [room1, room2, room3];
+
+        expect(Room.availableRooms(rooms, new Date('2024-01-01'), new Date('2024-01-02'))).toEqual([room1, room2, room3]);
+    });
+
+    test('Check all rooms for 03-06', () => {
+        const room1 = new Room({...roomTemplate, });
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room1});
+        room1.bookings = [booking1];
+
+        const room2 = new Room({...roomTemplate});
+        const booking2 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-08'), checkOut: new Date('2024-01-10'), room:room2});
+        room2.bookings = [booking2];
+
+        const room3 = new Room({...roomTemplate});
+        const booking3 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-11'), checkOut: new Date('2024-01-13'), room:room3});
+        room3.bookings = [booking3];
+
+        const rooms = [room1, room2, room3];
+
+        expect(Room.availableRooms(rooms, new Date('2024-01-03'), new Date('2024-01-06'))).toEqual([room2, room3]);
+    });
+
+    test('Check all rooms 1 and 2 for 03-06', () => {
+        const room1 = new Room({...roomTemplate, });
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room1});
+        room1.bookings = [booking1];
+
+        const room2 = new Room({...roomTemplate});
+        const booking2 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-08'), checkOut: new Date('2024-01-10'), room:room2});
+        room2.bookings = [booking2];
+
+        const room3 = new Room({...roomTemplate});
+        const booking3 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-11'), checkOut: new Date('2024-01-13'), room:room3});
+        room3.bookings = [booking3];
+
+        const rooms = [room1, room2];
+
+        expect(Room.availableRooms(rooms, new Date('2024-01-03'), new Date('2024-01-06'))).toEqual([room2]);
+    });
+
+    test('Check no rooms for any day', () => {
+        const room1 = new Room({...roomTemplate, });
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room1});
+        room1.bookings = [booking1];
+
+        const room2 = new Room({...roomTemplate});
+        const booking2 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-08'), checkOut: new Date('2024-01-10'), room:room2});
+        room2.bookings = [booking2];
+
+        const room3 = new Room({...roomTemplate});
+        const booking3 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-11'), checkOut: new Date('2024-01-13'), room:room3});
+        room3.bookings = [booking3];
+
+        const rooms = [];
+
+        expect(Room.availableRooms(rooms, new Date('2024-01-01'), new Date('2024-01-31'))).toEqual([]);
+    });
+
+    test('Check non truthy value', () => {
+        expect(Room.availableRooms()).toBeNull;
+    });
+
+    test('Check non Array value', () => {
+        expect(Room.availableRooms("Array", new Date('2024-01-01'), new Date('2024-01-31'))).toBeNull;
+    });
+
+    test('Check non Array object', () => {
+        expect(Room.availableRooms({}, new Date('2024-01-01'), new Date('2024-01-31'))).toBeNull;
+    });
+});
+
