@@ -1,6 +1,6 @@
 const {Room, Booking} = require('./index');
 
-const roomTemplate = {name: "RoomName", bookings: [], rate: 10000, discount: 0}
+const roomTemplate = {name: "RoomName", bookings: [], rate: 100000, discount: 0}
 const bookingTemplate = {name: "Guest1", email: "guest1@test.com", checkIn: new Date('2024-01-01'), 
     checkOut: new Date('2024-01-31'), discount: 0, room:{}}
 
@@ -309,3 +309,38 @@ describe('\nTesting availableRooms method:', () => {
     });
 });
 
+describe('\nTesting getFee method:', () => {
+    test('Check booking1 price (no discounts)', () => {
+        const room = new Room({...roomTemplate});
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room});
+        const booking2 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-08'), checkOut: new Date('2024-01-10'), room:room});
+        room.bookings = [booking1, booking2];
+
+        expect(booking1.getFee()).toEqual(400000);
+    });
+
+    test('Check booking2 price (no discounts)', () => {
+        const room = new Room({...roomTemplate});
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room});
+        const booking2 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-08'), checkOut: new Date('2024-01-10'), room:room});
+        room.bookings = [booking1, booking2];
+
+        expect(booking2.getFee()).toEqual(200000);
+    });
+
+    test('Check booking1 price (50% room discount)', () => {
+        const room = new Room({...roomTemplate, discount:50});
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room});
+        room.bookings = [booking1];
+
+        expect(booking1.getFee()).toEqual(200000);
+    });
+
+    test('Check booking1 price (50% room discount and 75% booking discount)', () => {
+        const room = new Room({...roomTemplate, discount:50});
+        const booking1 = new Booking({...bookingTemplate, checkIn: new Date('2024-01-03'), checkOut: new Date('2024-01-07'), room:room, discount:75});
+        room.bookings = [booking1];
+
+        expect(booking1.getFee()).toEqual(50000);
+    });
+});

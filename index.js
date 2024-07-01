@@ -85,8 +85,18 @@ class Booking {
         this.room = object.room;
     }
 
-    getFee(date){
+    getFee(){
+        if(!this.checkIn || typeof this.checkIn.getMonth !== 'function' || !this.checkOut || typeof this.checkOut.getMonth !== 'function')
+            return null;
 
+        if(this.checkIn >= this.checkOut)
+            return false;
+
+        const pricePerNigth = (this.room.rate * ((100 - this.room.discount)/100)) * ((100 - this.discount)/100);
+        const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+        const diffDays = Math.round(Math.abs((this.checkIn - this.checkOut) / oneDay));
+
+        return diffDays*pricePerNigth;
     }
 }
 
